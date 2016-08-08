@@ -18,32 +18,27 @@ if (!function_exists('langswitch_item')):
 // TODO Use wp_get_nav_menu_items?
 // http://codex.wordpress.org/Function_Reference/wp_get_nav_menu_items
 function langswitch_item( $items, $args ) {
+	global $q_config;
 	// TODO Enable user to choose menu
 
 	// Iterate through languages
-	$langs = qtrans_getSortedLanguages();
+	$langs = qtranxf_getSortedLanguages();
 	// Select menu location to add switcher to
-	if( $args->theme_location == 'navigation')  {
+	if( $args->theme_location == 'primary')  { //<<<<<<<<<<---------- CHANGE MENU NAME HERE!
 		foreach ($langs as $lang) {
 
+			$url = (is_404()) ? get_option('home') : '';
+
 			// Don't display for current language
-			if ($lang == qtrans_getLanguage())
-				continue;
+			/*if ($lang == qtranxf_getLanguage())
+				continue;*/
 
 			// Prepare variables
-			$URL = qtrans_convertURL($_SERVER["REQUEST_URI"], $lang);
+			$URL = qtranxf_convertURL($url, $lang, false, true);
 			// I wanted to do as below but it's ugly when language names are not translated
 			//$title = sprintf(__('In %s', 'langswitch-item'),
-			//  qtrans_getLanguageName($lang));
-			$title = qtrans_getLanguageName($lang);
-
-			// Dirty fix to adjust displayed language
-			/*switch ($lang) {
-			case 'sv':
-				$title = "In Swedish"; break;
-			case 'en':
-				$title = "På engelska"; break;
-			}*/
+			//  qtranxf_getLanguageName($lang));
+			$title = $q_config['language_name'][$lang];
 
 			// Modify output
 			// TODO If exists, use function for menu link html
